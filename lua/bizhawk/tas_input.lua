@@ -32,7 +32,7 @@ local output = io.open(gameinfo.getromname() .. ".dat", "wb")
 console.log("saving to \"" .. gameinfo.getromname() .. ".dat\"")
 
 if movie.isloaded() then
-	for i=0,movie.length() - 1 do
+	while movie.mode() == "PLAY" do
 		if not emu.islagged() then
 			output:write(string.char(inputToInt(movie.getinput(i))))
 		end
