@@ -46,17 +46,17 @@ def ready(ser):
 def controll(ser, movie):
     while True:
         if ser.read() == REQ_NEXT:
-            data = movie.read(1)
+            data = movie.read(2)
             if data != b'':
                 ser.write(data)
             else:
-                break
+                movie.close()
 
 
 def main():
     (options, args) = parser.parse_args()
 
-    movie = open_file(options['filepath'])
+    movie = open_file(options.filepath)
 
     port = serial.Serial()
     port.port = get_port()
