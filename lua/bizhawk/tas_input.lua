@@ -33,7 +33,9 @@ console.log("saving to \"" .. gameinfo.getromname() .. ".dat\"")
 
 if movie.isloaded() then
 	for i=0,movie.length() - 1 do
-		output:write(string.char(inputToInt(movie.getinput(i))))
+		if not emu.islagged() then
+			output:write(string.char(inputToInt(movie.getinput(i))))
+		end
 	end
 end
 
