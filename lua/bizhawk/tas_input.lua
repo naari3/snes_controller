@@ -31,11 +31,14 @@ local output = io.open(gameinfo.getromname() .. ".dat", "wb")
 
 console.log("saving to \"" .. gameinfo.getromname() .. ".dat\"")
 
+current_frames = 0
 if movie.isloaded() then
 	while movie.mode() == "PLAY" do
 		if not emu.islagged() then
-			output:write(string.char(inputToInt(movie.getinput(i))))
+			output:write(string.char(inputToInt(movie.getinput(current_frames))))
 		end
+		current_frames = current_frames + 1
+		emu.frameadvance()
 	end
 end
 
