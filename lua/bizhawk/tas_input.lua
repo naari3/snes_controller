@@ -33,9 +33,9 @@ console.log("saving to \"" .. gameinfo.getromname() .. ".dat\"")
 
 current_frames = 0
 if movie.isloaded() then
-	while movie.mode() == "PLAY" do
-		if not emu.islagged() then
-			output:write(string.char(inputToInt(movie.getinput(current_frames))))
+	while movie.length() >= current_frames do
+		if not emu.islagged() and current_frames ~= 0 then
+			output:write(string.char(inputToInt(movie.getinput(current_frames - 1))))
 		end
 		current_frames = current_frames + 1
 		emu.frameadvance()
