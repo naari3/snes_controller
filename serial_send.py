@@ -14,19 +14,17 @@ READY = b'\x01'
 REQ_NEXT = b'\x02'
 
 
-def m3():
-    # a = [b'\x00\x01', b'\x00\x01', b'\x01\x00', b'\x01\x00', b'\x00\x02', b'\x00\x02', b'\x02\x00', b'\x02\x00', b'\x00\x04', b'\x00\x04', b'\x00\x08', b'\x00\x08', b'\x04\x00', b'\x04\x00', b'\x10\x00', b'\x10\x00', b'\x20\x00', b'\x20\x00', b'\x40\x00', b'\x40\x00', b'\x80\x00', b'\x80\x00']
-    a = [b'\x00\x01',  b'\x01\x00',  b'\x00\x02',  b'\x02\x00',  b'\x00\x04',
-         b'\x00\x08',  b'\x04\x00',  b'\x10\x00',  b'\x20\x00',  b'\x40\x00',  b'\x80\x00']
-    i = 0
-    while True:
-        b = a[i % len(a)]
-        i += 1
-        yield b
-
-
 def open_file(filepath):
     return open(filepath, 'rb')
+
+
+def bite_to_input(byte):
+    input_list = list('BYsSudlrAXLR1234')
+    input_int = int.from_bytes(byte, 'little')
+    for i, s in enumerate(''.join(input_list)):
+        if not bool(input_int & (1 << i)):
+            input_list[i] = ' '
+    return ''.join(input_list)
 
 
 def get_port():
@@ -44,13 +42,16 @@ def ready(ser):
 
 
 def controll(ser, movie):
+    current_frames = 0
     while True:
         if ser.read() == REQ_NEXT:
             data = movie.read(2)
+            print(f'{current_frames}: {bite_to_input(data)}')
             if data != b'':
                 ser.write(data)
             else:
                 movie.close()
+            current_frames += 1
 
 
 def main():
