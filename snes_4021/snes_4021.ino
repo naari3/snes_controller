@@ -41,8 +41,7 @@ void setup() {
   pinMode(PINDAT, OUTPUT);
   pinMode(PINVCC, INPUT);
 
-  while(!(PINB & (1 << PINVCC)));
-
+  while(((PIND >> PINVCC) & 1) == 0);
   Serial.write(READY);
 }
 
@@ -63,7 +62,6 @@ void latching() {
 }
 
 void clocking() {
-//  Serial.println("clock");
   clock_count++;
   if ((current_input & 1) || clock_count > 15) WRITE_DAT_LOW;
   else WRITE_DAT_HIGH;
