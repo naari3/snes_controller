@@ -43,3 +43,5 @@ if movie.isloaded() then
 end
 
 output:close()
+
+console.log("saved")
