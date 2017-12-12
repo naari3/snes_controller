@@ -34,10 +34,10 @@ void setup() {
   Serial.begin(115200);
 
   while(Serial.read() != STAND_BY);
- 
+
   attachInterrupt(digitalPinToInterrupt(PINCLK), clocking, RISING);
   attachInterrupt(digitalPinToInterrupt(PINLAT), latching, RISING);
- 
+
   pinMode(PINDAT, OUTPUT);
   pinMode(PINVCC, INPUT);
 
@@ -54,7 +54,7 @@ void loop() {
 
 void latching() {
   current_input = (next_input_h << 8| next_input_l);
-  if (current_input & 1) WRITE_DAT_LOW;
+  if ((current_input & 1) || clock_count > 15) WRITE_DAT_LOW;
   else WRITE_DAT_HIGH;
   current_input >>= 1;
   Serial.write(REQ_NEXT);
@@ -67,4 +67,3 @@ void clocking() {
   else WRITE_DAT_HIGH;
   current_input >>= 1;
 }
-
